@@ -198,15 +198,38 @@
         }
 
         if (!destination || !validateDestination(destination)) {
-            loading.innerHTML = "<p>Invalid or missing website URL.</p>";
-        } else {
-            openOriginal.href = destination;
 
-            frame.addEventListener("load", function () {
-                loading.classList.add("hidden");
+            loading.innerHTML = "<p>Invalid or missing website URL.</p>";
+
+        } else {
+
+            const hostname = new URL(destination).hostname.toLowerCase();
+
+            // Known domains that should open directly.
+            const blockedDomains = [
+                "google.com"
+            ];
+
+            const isBlockedDomain = blockedDomains.some(domain => {
+                return hostname === domain || hostname.endsWith("." + domain);
             });
 
-            frame.src = destination;
+            if (isBlockedDomain) {
+
+                // Google does not permit this type of iframe embedding.
+                // Open the original website directly.
+                window.location.replace(destination);
+
+            } else {
+
+                openOriginal.href = destination;
+
+                frame.addEventListener("load", function () {
+                    loading.classList.add("hidden");
+                });
+
+                frame.src = destination;
+            }
         }
     </script>
 
