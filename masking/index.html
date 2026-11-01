@@ -168,13 +168,13 @@
         "use strict";
 
         const params = new URLSearchParams(window.location.search);
-
         const destination = params.get("url");
 
         const frame = document.getElementById("websiteFrame");
         const loading = document.getElementById("loading");
         const openOriginal = document.getElementById("openOriginal");
 
+        // Validate destination URL.
         function validateDestination(value) {
             try {
                 const url = new URL(value);
@@ -197,33 +197,45 @@
             }
         }
 
+        // Domains that require direct navigation.
+        const blockedDomains = [
+            "google.com",
+            "youtube.com",
+            "youtu.be",
+            "facebook.com",
+            "instagram.com"
+        ];
+
+        // Match exact domain and its subdomains.
+        function requiresRedirect(hostname) {
+            return blockedDomains.some(domain => {
+                return (
+                    hostname === domain ||
+                    hostname.endsWith("." + domain)
+                );
+            });
+        }
+
         if (!destination || !validateDestination(destination)) {
 
-            loading.innerHTML = "<p>Invalid or missing website URL.</p>";
+            loading.innerHTML =
+                "<p>Invalid or missing website URL.</p>";
 
         } else {
 
-            const hostname = new URL(destination).hostname.toLowerCase();
+            const destinationUrl = new URL(destination);
+            const hostname = destinationUrl.hostname.toLowerCase();
 
-            // Known domains that should open directly.
-            const blockedDomains = [
-                "google.com"
-            ];
+            openOriginal.href = destination;
 
-            const isBlockedDomain = blockedDomains.some(domain => {
-                return hostname === domain || hostname.endsWith("." + domain);
-            });
+            if (requiresRedirect(hostname)) {
 
-            if (isBlockedDomain) {
-
-                // Google does not permit this type of iframe embedding.
-                // Open the original website directly.
+                // Open known non-embeddable platforms directly.
                 window.location.replace(destination);
 
             } else {
 
-                openOriginal.href = destination;
-
+                // Display other websites where embedding is permitted.
                 frame.addEventListener("load", function () {
                     loading.classList.add("hidden");
                 });
