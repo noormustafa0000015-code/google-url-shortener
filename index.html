@@ -1,0 +1,272 @@
+
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Google Shortener — Simple Google URL Shortener</title>
+
+    <meta name="description"
+          content="Shorten your supported Google links with Google Shortener. Create simple, secure and easy-to-share short URLs.">
+
+    <meta name="theme-color" content="#f8fafc">
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <header class="navbar">
+        <div class="nav-container">
+
+            <a href="#" class="brand">
+                <span class="brand-icon">↗</span>
+                <span>Google Shortener</span>
+            </a>
+
+            <div class="nav-actions">
+                <span class="nav-label">Simple URL Shortener</span>
+
+                <button
+                    type="button"
+                    class="theme-toggle"
+                    id="themeToggle"
+                    aria-label="Toggle color theme"
+                    title="Toggle theme"
+                >
+                    <span id="themeIcon">☀</span>
+                </button>
+            </div>
+
+        </div>
+    </header>
+
+
+    <!-- Main Content -->
+    <main class="main">
+
+        <!-- Hero Section -->
+        <section class="hero">
+
+            <span class="tag">
+                <span class="tag-dot"></span>
+                SIMPLE URL SHORTENER
+            </span>
+
+            <h1>
+                Shorten your Google links.
+                <span>Share them anywhere.</span>
+            </h1>
+
+            <p>
+                Turn long Google URLs into short, easy-to-share links.
+                Paste your Google URL below and create your short link
+                in seconds.
+            </p>
+
+        </section>
+
+
+        <!-- URL Shortener -->
+        <section class="shortener-section">
+
+            <div class="shortener-card">
+
+                <div class="card-heading">
+                    <div class="card-icon">🔗</div>
+
+                    <div>
+                        <h2>Create a short link</h2>
+                        <p>Enter your supported Google URL below.</p>
+                    </div>
+                </div>
+
+
+                <form id="shortenerForm" novalidate>
+
+                    <label for="googleUrl">
+                        Your original URL
+                    </label>
+
+                    <div class="input-wrapper">
+                        <span class="input-icon">↗</span>
+
+                        <input
+                            type="url"
+                            id="googleUrl"
+                            placeholder="https://www.google.com/maps/..."
+                            autocomplete="url"
+                            required
+                        >
+                    </div>
+
+                    <button
+                        type="submit"
+                        id="shortenButton"
+                        class="shorten-button"
+                    >
+                        Shorten URL
+                        <span>→</span>
+                    </button>
+
+                    <p class="helper-text">
+                        Supports HTTPS links from supported Google domains.
+                    </p>
+
+                </form>
+
+
+                <!-- API Success / Error Messages -->
+                <div
+                    id="message"
+                    class="message"
+                    role="status"
+                    aria-live="polite"
+                    hidden
+                ></div>
+
+            </div>
+
+            <p class="security-note">
+                <span>🔒</span>
+                Your links are stored securely in our database.
+            </p>
+
+        </section>
+
+
+        <!-- Features -->
+        <section class="features">
+
+            <div class="section-heading">
+                <span class="section-label">WHY GOOGLE SHORTENER</span>
+                <h2>Simple links. Easy sharing.</h2>
+                <p>Everything you need to make your Google URLs easier to share.</p>
+            </div>
+
+
+            <div class="feature-grid">
+
+                <article class="feature">
+                    <div class="feature-icon">⚡</div>
+
+                    <h3>Quick & Simple</h3>
+
+                    <p>
+                        Create short links in seconds with a simple
+                        and straightforward process.
+                    </p>
+                </article>
+
+
+                <article class="feature">
+                    <div class="feature-icon">🛡️</div>
+
+                    <h3>Secure Validation</h3>
+
+                    <p>
+                        Supported Google HTTPS URLs are checked
+                        before a short link is created.
+                    </p>
+                </article>
+
+
+                <article class="feature">
+                    <div class="feature-icon">🔗</div>
+
+                    <h3>Easy Sharing</h3>
+
+                    <p>
+                        Share shorter URLs that are easier to copy,
+                        send and remember.
+                    </p>
+                </article>
+
+            </div>
+
+        </section>
+
+
+        <!-- How It Works -->
+        <section class="how-it-works">
+
+            <div class="section-heading">
+                <span class="section-label">GET STARTED</span>
+                <h2>How it works</h2>
+                <p>Three simple steps to create your short link.</p>
+            </div>
+
+
+            <div class="steps">
+
+                <article class="step">
+                    <span class="step-number">01</span>
+
+                    <h3>Paste your link</h3>
+
+                    <p>
+                        Enter a supported Google URL into the input field.
+                    </p>
+                </article>
+
+
+                <article class="step">
+                    <span class="step-number">02</span>
+
+                    <h3>Create your short link</h3>
+
+                    <p>
+                        Our service generates a unique ID and saves
+                        your short link.
+                    </p>
+                </article>
+
+
+                <article class="step">
+                    <span class="step-number">03</span>
+
+                    <h3>Share it anywhere</h3>
+
+                    <p>
+                        Copy your new short URL and share it with others.
+                    </p>
+                </article>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- Footer -->
+    <footer class="footer">
+
+        <div class="footer-container">
+
+            <a href="#" class="footer-brand">
+                <span class="brand-icon">↗</span>
+                Google Shortener
+            </a>
+
+            <p>
+                Simple, convenient Google link shortening.
+            </p>
+
+            <span class="copyright">
+                © 2026 Google Shortener. All rights reserved.
+            </span>
+
+        </div>
+
+    </footer>
+
+
+    <!-- JavaScript -->
+    <script src="js/app.js"></script>
+    <script src="js/theme.js"></script>
+
+</body>
+</html>
