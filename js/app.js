@@ -11,23 +11,11 @@ const input = document.getElementById("googleUrl");
 const message = document.getElementById("message");
 const button = document.getElementById("shortenButton");
 
-// Google domains allowed by the frontend
-const allowedDomains = [
-    "google.com",
-    "google.co.uk",
-    "google.ca",
-    "google.com.pk",
-    "google.com.au",
-    "google.co.in",
-    "google.de",
-    "google.fr",
-    "google.co.jp",
-    "goo.gl",
-    "g.co"
-];
+// Maximum allowed URL length
+const MAX_URL_LENGTH = 2048;
 
-// Validate Google URL
-function isGoogleURL(value) {
+// Validate any public HTTPS website URL
+function isValidURL(value) {
     try {
         const url = new URL(value);
 
@@ -42,10 +30,30 @@ function isGoogleURL(value) {
 
         const hostname = url.hostname.toLowerCase();
 
-        return allowedDomains.some(domain =>
-            hostname === domain ||
-            hostname.endsWith("." + domain)
-        );
+        // Require a public-looking domain name
+        if (!hostname || !hostname.includes(".")) {
+            return false;
+        }
+
+        // Reject IP addresses
+        if (
+            hostname.startsWith("[") ||
+            /^\d{1,3}(\.\d{1,3}){3}$/.test(hostname)
+        ) {
+            return false;
+        }
+
+        // Reject local and internal destinations
+        if (
+            hostname === "localhost" ||
+            hostname.endsWith(".localhost") ||
+            hostname.endsWith(".local") ||
+            hostname.endsWith(".internal")
+        ) {
+            return false;
+        }
+
+        return true;
 
     } catch {
         return false;
@@ -83,6 +91,7 @@ function showShortLink(data) {
     const actions = document.createElement("div");
     actions.className = "short-link-actions";
 
+    // Copy button
     const copyButton = document.createElement("button");
     copyButton.type = "button";
     copyButton.textContent = "Copy Link";
@@ -93,6 +102,7 @@ function showShortLink(data) {
             await navigator.clipboard.writeText(data.shortUrl);
 
             copyButton.textContent = "Copied!";
+
             showMessage(
                 "Short link copied successfully!",
                 "success"
@@ -112,6 +122,7 @@ function showShortLink(data) {
         }
     });
 
+    // Open button
     const openButton = document.createElement("a");
     openButton.href = data.shortUrl;
     openButton.target = "_blank";
@@ -159,7 +170,7 @@ async function generateShortId(originalUrl) {
         throw new Error(data.error || "Something went wrong.");
     }
 
-    // Make sure the backend returned a saved short link
+    // Confirm the link was saved
     if (
         data.status !== "saved" ||
         !data.shortId ||
@@ -181,15 +192,23 @@ form.addEventListener("submit", async function(event) {
 
     if (!originalURL) {
         showMessage(
-            "Please paste a Google URL first.",
+            "Please paste a website URL first.",
             "error"
         );
         return;
     }
 
-    if (!isGoogleURL(originalURL)) {
+    if (originalURL.length > MAX_URL_LENGTH) {
         showMessage(
-            "Please enter a supported Google HTTPS URL.",
+            "URL is too long. Maximum length is 2048 characters.",
+            "error"
+        );
+        return;
+    }
+
+    if (!isValidURL(originalURL)) {
+        showMessage(
+            "Please enter a valid public HTTPS website URL.",
             "error"
         );
         return;
@@ -209,8 +228,7 @@ form.addEventListener("submit", async function(event) {
         console.error("Shortener error:", error);
 
         showMessage(
-            error.message +
-            " Please try again.",
+            error.message + " Please try again.",
             "error"
         );
 
